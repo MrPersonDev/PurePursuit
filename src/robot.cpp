@@ -1,6 +1,6 @@
 #include "robot.hpp"
 
-const double Robot::DRIVE_WIDTH = 24;
+const double Robot::DRIVE_WIDTH = 18;
 const double Robot::WHEEL_DIAMETER = 4;
 const double Robot::ACCELERATION = 100.0; // power / second
 const int Robot::RPM = 200;
