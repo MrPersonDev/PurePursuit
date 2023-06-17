@@ -8,12 +8,17 @@ class Robot
         Robot();
         ~Robot();
         void init(SDL_Renderer *renderer);
+        void updatePosition(double delta);
         void render(SDL_Renderer *renderer);
         void free();
 
     private:
         SDL_Texture *robotTexture;
+        const static double DRIVE_WIDTH;
+        const static double WHEEL_DIAMETER;
+        const static int RPM;
         const static int SIZE;
         double x, y;
         double heading;
+        double leftPower, rightPower;
 };

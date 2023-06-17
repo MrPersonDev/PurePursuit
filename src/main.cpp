@@ -27,15 +27,22 @@ int main()
 
     SDL_Event e;
     bool quit = false;
+    double frameDelta = 0.0;
     while (!quit)
     {
+        long start = SDL_GetPerformanceCounter();
+
         while (SDL_PollEvent(&e) != 0)
 		{
 			if (e.type == SDL_QUIT)
 				quit = true;
 		}
-        
+
+        gRobot.updatePosition(frameDelta);
         render();
+
+        long end = SDL_GetPerformanceCounter();
+		frameDelta = (end - start) / (double)(SDL_GetPerformanceFrequency() * 1000.0);
     }
 
     close();
