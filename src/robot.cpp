@@ -2,6 +2,7 @@
 
 const double Robot::DRIVE_WIDTH = 10;
 const double Robot::WHEEL_DIAMETER = 4;
+const double Robot::ACCELERATION = 100.0; // power / second
 const int Robot::RPM = 200;
 const int Robot::SIZE = 100;
 
@@ -20,8 +21,25 @@ void Robot::init(SDL_Renderer *renderer)
     x = 0.0;
     y = 0.0;
     heading = 0.0;
+    desiredLeftPower = 0.0;
+    desiredRightPower = 0.0;
     leftPower = 0.0;
     rightPower = 0.0;
+}
+
+void Robot::updateWheelPower(double delta)
+{
+    double change = ACCELERATION / 1000.0 * delta;
+
+    if (leftPower < desiredLeftPower)
+        leftPower = std::min(leftPower + change, desiredLeftPower);
+    else if (leftPower > desiredLeftPower)
+        leftPower = std::max(leftPower - change, desiredLeftPower);
+    
+    if (rightPower < desiredRightPower)
+        rightPower = std::min(rightPower + change, desiredRightPower);
+    else if (rightPower > desiredRightPower)
+        rightPower = std::max(rightPower - change, desiredRightPower);
 }
 
 void Robot::updatePosition(double delta)

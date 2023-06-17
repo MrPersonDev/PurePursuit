@@ -38,11 +38,12 @@ int main()
 				quit = true;
 		}
 
+        gRobot.updateWheelPower(frameDelta);
         gRobot.updatePosition(frameDelta);
         render();
 
         long end = SDL_GetPerformanceCounter();
-		frameDelta = (end - start) / (double)(SDL_GetPerformanceFrequency() * 1000.0);
+		frameDelta = (end - start) * 1000.0 / (double)SDL_GetPerformanceFrequency();
     }
 
     close();
