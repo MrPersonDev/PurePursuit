@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 
 #include "map.hpp"
+#include "robot.hpp"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
@@ -10,6 +11,7 @@ SDL_Surface *gScreenSurface = NULL;
 SDL_Renderer*gRenderer = NULL;
 
 Map gMap;
+Robot gRobot;
 
 void render();
 bool init();
@@ -43,6 +45,7 @@ void render()
 {
     SDL_RenderClear(gRenderer);
     gMap.render(gRenderer);
+    gRobot.render(gRenderer);
     SDL_RenderPresent(gRenderer);
 }
 
@@ -59,6 +62,7 @@ bool init()
         return false;
 
     gMap.init(gRenderer);
+    gRobot.init(gRenderer);
     
     return true;
 }
@@ -71,6 +75,7 @@ void close()
 	gRenderer = NULL;
 
     gMap.free();
+    gRobot.free();
     
     SDL_Quit();
 }
