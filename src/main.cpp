@@ -5,6 +5,9 @@
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
+const int FIELD_SIZE = 144;
+
+double mapScale = 1.0;
 
 SDL_Window *gWindow = NULL;
 SDL_Surface *gScreenSurface = NULL;
@@ -15,6 +18,7 @@ Robot gRobot;
 
 void render();
 bool init();
+void setScale();
 void close();
 
 int main()
@@ -24,6 +28,8 @@ int main()
         close();
         return 1;
     }
+    
+    setScale();
 
     SDL_Event e;
     bool quit = false;
@@ -53,7 +59,7 @@ void render()
 {
     SDL_RenderClear(gRenderer);
     gMap.render(gRenderer);
-    gRobot.render(gRenderer);
+    gRobot.render(gRenderer, mapScale);
     SDL_RenderPresent(gRenderer);
 }
 
@@ -73,6 +79,11 @@ bool init()
     gRobot.init(gRenderer);
     
     return true;
+}
+
+void setScale()
+{
+    mapScale = SCREEN_WIDTH / FIELD_SIZE;
 }
 
 void close()

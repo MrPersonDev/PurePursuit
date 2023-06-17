@@ -10,7 +10,7 @@ class Robot
         void init(SDL_Renderer *renderer);
         void updateWheelPower(double delta);
         void updatePosition(double delta);
-        void render(SDL_Renderer *renderer);
+        void render(SDL_Renderer *renderer, double scale);
         void free();
 
     private:
@@ -19,7 +19,6 @@ class Robot
         const static double WHEEL_DIAMETER;
         const static double ACCELERATION;
         const static int RPM;
-        const static int SIZE;
         double x, y;
         double heading;
         double desiredLeftPower, desiredRightPower;

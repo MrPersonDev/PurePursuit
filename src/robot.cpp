@@ -1,10 +1,9 @@
 #include "robot.hpp"
 
-const double Robot::DRIVE_WIDTH = 10;
+const double Robot::DRIVE_WIDTH = 24;
 const double Robot::WHEEL_DIAMETER = 4;
 const double Robot::ACCELERATION = 100.0; // power / second
 const int Robot::RPM = 200;
-const int Robot::SIZE = 100;
 
 Robot::Robot() { }
 
@@ -55,9 +54,9 @@ void Robot::updatePosition(double delta)
     heading -= angular;
 }
 
-void Robot::render(SDL_Renderer *renderer)
+void Robot::render(SDL_Renderer *renderer, double scale)
 {
-    SDL_Rect renderQuad = {x, y, SIZE, SIZE};
+    SDL_Rect renderQuad = {x * scale, y * scale, DRIVE_WIDTH * scale, DRIVE_WIDTH * scale};
     SDL_RenderCopyEx(renderer, robotTexture, NULL, &renderQuad, heading * (180.0 / M_PI), NULL, SDL_FLIP_NONE);
 }
 
