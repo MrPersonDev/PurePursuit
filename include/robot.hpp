@@ -9,6 +9,7 @@ class Robot
         Robot();
         ~Robot();
         void init(SDL_Renderer *renderer);
+        void reset();
         int oppositeSign(double n);
         void moveToGoal();
         void updateWheelPower(double delta);
@@ -38,4 +39,5 @@ class Robot
         double heading;
         double desiredLeftPower, desiredRightPower;
         double leftPower, rightPower;
+        bool running;
 };

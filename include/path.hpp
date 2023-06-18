@@ -8,6 +8,8 @@ class Path
     public:
         Path();
         ~Path();
+        void reset();
+        void resetPath();
         void addPoint(double x, double y);
         int sign(double n);
         bool validPoint(double pointX, double pointY, double x1, double y1, double x2, double y2);

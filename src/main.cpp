@@ -9,6 +9,7 @@ const int SCREEN_HEIGHT = 800;
 const int FIELD_SIZE = 144;
 
 double mapScale = 1.0;
+bool running = false;
 
 SDL_Window *gWindow = NULL;
 SDL_Surface *gScreenSurface = NULL;
@@ -20,6 +21,7 @@ Path gPath;
 
 void render();
 bool init();
+void run();
 void setScale();
 void setPath();
 void close();
@@ -47,14 +49,21 @@ int main()
 			if (e.type == SDL_QUIT)
 				quit = true;
 		}
+        
+        const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+        if (currentKeyStates[SDL_SCANCODE_SPACE])
+            run();
+    
+        if (running)
+        {
+            std::pair<double, double> goalPoint = gPath.getPoint(gRobot.getX(), gRobot.getY(), gRobot.getLookAheadDist());
+            gPath.setGoalPoint(goalPoint.first, goalPoint.second);
+            gRobot.setGoalPoint(goalPoint.first, goalPoint.second);
 
-        std::pair<double, double> goalPoint = gPath.getPoint(gRobot.getX(), gRobot.getY(), gRobot.getLookAheadDist());
-        gPath.setGoalPoint(goalPoint.first, goalPoint.second);
-        gRobot.setGoalPoint(goalPoint.first, goalPoint.second);
-
-        gRobot.moveToGoal();
-        gRobot.updateWheelPower(frameDelta);
-        gRobot.updatePosition(frameDelta);
+            gRobot.moveToGoal();
+            gRobot.updateWheelPower(frameDelta);
+            gRobot.updatePosition(frameDelta);
+        }
         
         render();
 
@@ -90,6 +99,13 @@ bool init()
     gRobot.init(gRenderer);
     
     return true;
+}
+
+void run()
+{
+    gRobot.reset();
+    gPath.reset();
+    running = true;
 }
 
 void setScale()

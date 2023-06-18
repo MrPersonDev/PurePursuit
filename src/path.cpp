@@ -18,6 +18,18 @@ Path::~Path()
     free();
 }
 
+void Path::reset()
+{
+    lastFoundIndex = 0;
+    goalX = 0.0;
+    goalY = 0.0;
+}
+
+void Path::resetPath()
+{
+    points.clear();
+}
+
 void Path::addPoint(double x, double y)
 {
     points.push_back({x, y});

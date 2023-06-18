@@ -23,8 +23,13 @@ void Robot::init(SDL_Renderer *renderer)
     std::string path = std::string(SDL_GetBasePath()) + "assets/images/squirrel.png";
     robotTexture = IMG_LoadTexture(renderer, path.c_str());
     
+    reset();
+}
+
+void Robot::reset()
+{
     x = DRIVE_WIDTH/2;
-    y = DRIVE_WIDTH/2 + 80;
+    y = DRIVE_WIDTH/2;
     heading = 0.0;
     desiredLeftPower = 0.0;
     desiredRightPower = 0.0;
