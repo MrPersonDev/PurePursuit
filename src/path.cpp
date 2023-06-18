@@ -64,6 +64,12 @@ std::pair<double, double> Path::getPoint(double x, double y, double lookAheadDis
 {
     for (int i = lastFoundIndex; i < points.size()-1; i++)
     {
+        double dist1 = pointToPointDist(x, y, points[i].first, points[i].second);
+        double dist2 = pointToPointDist(x, y, points[i+1].first, points[i+1].second);
+
+        if (std::min(dist1, dist2) > lookAheadDist)
+            return points[lastFoundIndex];
+
         double lineX1 = points[i].first - x, lineY1 = points[i].second - y;
         double lineX2 = points[i+1].first - x, lineY2 = points[i+1].second - y;
 
@@ -84,7 +90,7 @@ std::pair<double, double> Path::getPoint(double x, double y, double lookAheadDis
         bool sol2Valid = validPoint(sol2X, sol2Y, points[i].first, points[i].second, points[i+1].first, points[i+1].second);
 
         if (!(sol1Valid || sol2Valid))
-            return points[lastFoundIndex];
+            continue;
         
         std::pair<double, double> sol1 = {sol1X, sol1Y}, sol2 = {sol2X, sol2Y};
         
