@@ -5,6 +5,7 @@ const double Robot::DRIVE_WIDTH = 18;
 const double Robot::WHEEL_DIAMETER = 4;
 const double Robot::ACCELERATION = 100.0; // power / second
 const int Robot::RPM = 200;
+const SDL_Color Robot::LOOK_AHEAD_CIRCLE_COLOR = {255, 255, 0, 255};
 
 Robot::Robot() { }
 
@@ -77,6 +78,8 @@ double Robot::getLookAheadDist()
 
 void Robot::render(SDL_Renderer *renderer, double scale)
 {
+    circleRGBA(renderer, x * scale, y * scale, LOOK_AHEAD_DIST * scale, LOOK_AHEAD_CIRCLE_COLOR.r, LOOK_AHEAD_CIRCLE_COLOR.g, LOOK_AHEAD_CIRCLE_COLOR.b, LOOK_AHEAD_CIRCLE_COLOR.a);
+
     SDL_Rect renderQuad = {(x-DRIVE_WIDTH/2) * scale, (y-DRIVE_WIDTH/2) * scale, DRIVE_WIDTH * scale, DRIVE_WIDTH * scale};
     SDL_RenderCopyEx(renderer, robotTexture, NULL, &renderQuad, heading * (180.0 / M_PI), NULL, SDL_FLIP_NONE);
 }

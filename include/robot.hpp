@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include <string>
 
 class Robot
@@ -24,6 +25,7 @@ class Robot
         static const double WHEEL_DIAMETER;
         static const double ACCELERATION;
         static const int RPM;
+        static const SDL_Color LOOK_AHEAD_CIRCLE_COLOR;
         double x, y;
         double heading;
         double desiredLeftPower, desiredRightPower;
