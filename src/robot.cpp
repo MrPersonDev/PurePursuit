@@ -54,6 +54,16 @@ void Robot::moveToGoal()
     
     desiredLeftPower = linearVel + turnVel;
     desiredRightPower = linearVel - turnVel;
+    
+    if (desiredLeftPower < -100)
+        desiredLeftPower = -100;
+    else if (desiredLeftPower > 100)
+        desiredLeftPower = 100;
+
+    if (desiredRightPower < -100)
+        desiredRightPower = -100;
+    else if (desiredRightPower > 100)
+        desiredRightPower = 100;
 }
 
 void Robot::updateWheelPower(double delta)
