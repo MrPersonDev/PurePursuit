@@ -53,6 +53,7 @@ int main()
 
         std::pair<double, double> goalPoint = gPath.getPoint(gRobot.getX(), gRobot.getY(), gRobot.getLookAheadDist());
         gPath.setGoalPoint(goalPoint.first, goalPoint.second);
+        gRobot.setGoalPoint(goalPoint.first, goalPoint.second);
         
         render();
 

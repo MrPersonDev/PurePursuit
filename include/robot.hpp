@@ -11,6 +11,7 @@ class Robot
         void init(SDL_Renderer *renderer);
         void updateWheelPower(double delta);
         void updatePosition(double delta);
+        void setGoalPoint(double x, double y);
         double getX();
         double getY();
         double getHeading();
@@ -26,7 +27,10 @@ class Robot
         static const double ACCELERATION;
         static const int RPM;
         static const SDL_Color LOOK_AHEAD_CIRCLE_COLOR;
+        static const SDL_Color LOOK_AHEAD_LINE_COLOR;
+        static const int LOOK_AHEAD_LINE_WIDTH;
         double x, y;
+        double goalX, goalY;
         double heading;
         double desiredLeftPower, desiredRightPower;
         double leftPower, rightPower;
