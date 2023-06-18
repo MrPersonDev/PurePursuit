@@ -51,7 +51,7 @@ void Robot::moveToGoal()
         absTargetAngle += M_PI*2;
     
     double minAngle = absTargetAngle - heading;
-    if (minAngle > M_PI_2 || minAngle < -M_PI_2)
+    if (minAngle > M_PI || minAngle < -M_PI)
         minAngle = oppositeSign(minAngle) * (M_PI*2 - abs(minAngle));
     
     double turnVel = ANGULAR_RESPONSE * minAngle;
