@@ -2,6 +2,7 @@
 
 #include "map.hpp"
 #include "robot.hpp"
+#include "path.hpp"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
@@ -15,10 +16,12 @@ SDL_Renderer*gRenderer = NULL;
 
 Map gMap;
 Robot gRobot;
+Path gPath;
 
 void render();
 bool init();
 void setScale();
+void setPath();
 void close();
 
 int main()
@@ -30,6 +33,7 @@ int main()
     }
     
     setScale();
+    setPath();
 
     SDL_Event e;
     bool quit = false;
@@ -60,6 +64,7 @@ void render()
     SDL_RenderClear(gRenderer);
     gMap.render(gRenderer);
     gRobot.render(gRenderer, mapScale);
+    gPath.render(gRenderer);
     SDL_RenderPresent(gRenderer);
 }
 
@@ -84,6 +89,14 @@ bool init()
 void setScale()
 {
     mapScale = SCREEN_WIDTH / FIELD_SIZE;
+}
+
+void setPath()
+{
+    gPath.addPoint({10, 10});
+    gPath.addPoint({500, 40});
+    gPath.addPoint({240, 600});
+    gPath.addPoint({100, 10});
 }
 
 void close()
