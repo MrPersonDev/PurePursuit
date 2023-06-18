@@ -22,6 +22,8 @@ Path gPath;
 void render();
 bool init();
 void run();
+void placePoint();
+void clearPoints();
 void setScale();
 void setPath();
 void close();
@@ -35,7 +37,6 @@ int main()
     }
     
     setScale();
-    setPath();
 
     SDL_Event e;
     bool quit = false;
@@ -48,6 +49,13 @@ int main()
 		{
 			if (e.type == SDL_QUIT)
 				quit = true;
+            else if (e.type == SDL_MOUSEBUTTONDOWN)
+            {
+                if (e.button.button == 1)
+                    placePoint();
+                else if (e.button.button == 3)
+                    clearPoints();
+            }
 		}
         
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
@@ -103,22 +111,33 @@ bool init()
 
 void run()
 {
+    if (!gPath.hasPoint())
+        return;
+
     gRobot.reset();
     gPath.reset();
     running = true;
 }
 
+void placePoint()
+{
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    
+    double xScaled = x / mapScale;
+    double yScaled = y / mapScale;
+
+    gPath.addPoint(xScaled, yScaled);
+}
+
+void clearPoints()
+{
+    gPath.resetPath();
+}
+
 void setScale()
 {
     mapScale = SCREEN_WIDTH / (double)FIELD_SIZE;
-}
-
-void setPath()
-{
-    gPath.addPoint(36, 12);
-    gPath.addPoint(36, 132);
-    gPath.addPoint(108, 132);
-    gPath.addPoint(108, 12);
 }
 
 void close()

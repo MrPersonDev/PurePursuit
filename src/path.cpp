@@ -8,9 +8,8 @@ const SDL_Color Path::GOAL_POINT_COLOR = {0, 255, 0, 255};
 
 Path::Path()
 { 
-    lastFoundIndex = 0;
-    goalX = 0.0;
-    goalY = 0.0;
+    reset();
+    resetPath();
 }
 
 Path::~Path()
@@ -33,6 +32,11 @@ void Path::resetPath()
 void Path::addPoint(double x, double y)
 {
     points.push_back({x, y});
+}
+
+bool Path::hasPoint()
+{
+    return points.size() > 0;
 }
 
 int Path::sign(double n)
@@ -75,7 +79,7 @@ std::pair<double, double> Path::getPoint(double x, double y, double lookAheadDis
         double sol1Y = (-D * dx + abs(dy) * sqrt(discriminant)) / pow(dr, 2) + y;
         double sol2X = (D * dy - sign(dy) * dx * sqrt(discriminant)) / pow(dr, 2) + x;
         double sol2Y = (-D * dx - abs(dy) * sqrt(discriminant)) / pow(dr, 2) + y;
-        
+
         bool sol1Valid = validPoint(sol1X, sol1Y, points[i].first, points[i].second, points[i+1].first, points[i+1].second);
         bool sol2Valid = validPoint(sol2X, sol2Y, points[i].first, points[i].second, points[i+1].first, points[i+1].second);
 
@@ -119,7 +123,7 @@ void Path::setGoalPoint(double x, double y)
 
 void Path::render(SDL_Renderer *renderer, double scale)
 {
-    for (int i = 0; i < points.size()-1; i++)
+    for (int i = 0; i < (int)points.size()-1; i++)
     {
         std::pair<double, double> curPoint = points[i], nextPoint = points[i+1];
         thickLineRGBA(renderer, curPoint.first * scale, curPoint.second * scale, nextPoint.first * scale, nextPoint.second * scale, LINE_WIDTH, LINE_COLOR.r, LINE_COLOR.g, LINE_COLOR.b, LINE_COLOR.a);
