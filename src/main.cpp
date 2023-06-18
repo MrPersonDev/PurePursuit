@@ -50,6 +50,10 @@ int main()
 
         gRobot.updateWheelPower(frameDelta);
         gRobot.updatePosition(frameDelta);
+
+        std::pair<double, double> goalPoint = gPath.getPoint(gRobot.getX(), gRobot.getY(), gRobot.getLookAheadDist());
+        gPath.setGoalPoint(goalPoint.first, goalPoint.second);
+
         render();
 
         long end = SDL_GetPerformanceCounter();
@@ -93,10 +97,10 @@ void setScale()
 
 void setPath()
 {
-    gPath.addPoint({36, 12});
-    gPath.addPoint({36, 132});
-    gPath.addPoint({108, 132});
-    gPath.addPoint({108, 12});
+    gPath.addPoint(36, 12);
+    gPath.addPoint(36, 132);
+    gPath.addPoint(108, 132);
+    gPath.addPoint(108, 12);
 }
 
 void close()
