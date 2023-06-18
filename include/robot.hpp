@@ -9,6 +9,8 @@ class Robot
         Robot();
         ~Robot();
         void init(SDL_Renderer *renderer);
+        int oppositeSign(double n);
+        void moveToGoal();
         void updateWheelPower(double delta);
         void updatePosition(double delta);
         void setGoalPoint(double x, double y);
@@ -26,6 +28,8 @@ class Robot
         static const double WHEEL_DIAMETER;
         static const double ACCELERATION;
         static const int RPM;
+        static const double ANGULAR_RESPONSE;
+        static const double LINEAR_RESPONSE;
         static const SDL_Color LOOK_AHEAD_CIRCLE_COLOR;
         static const SDL_Color LOOK_AHEAD_LINE_COLOR;
         static const int LOOK_AHEAD_LINE_WIDTH;

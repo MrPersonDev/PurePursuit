@@ -48,12 +48,13 @@ int main()
 				quit = true;
 		}
 
-        gRobot.updateWheelPower(frameDelta);
-        gRobot.updatePosition(frameDelta);
-
         std::pair<double, double> goalPoint = gPath.getPoint(gRobot.getX(), gRobot.getY(), gRobot.getLookAheadDist());
         gPath.setGoalPoint(goalPoint.first, goalPoint.second);
         gRobot.setGoalPoint(goalPoint.first, goalPoint.second);
+
+        gRobot.moveToGoal();
+        gRobot.updateWheelPower(frameDelta);
+        gRobot.updatePosition(frameDelta);
         
         render();
 

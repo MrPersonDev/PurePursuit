@@ -5,6 +5,8 @@ const double Robot::DRIVE_WIDTH = 18;
 const double Robot::WHEEL_DIAMETER = 4;
 const double Robot::ACCELERATION = 100.0; // power / second
 const int Robot::RPM = 200;
+const double Robot::ANGULAR_RESPONSE = 40.0;
+const double Robot::LINEAR_RESPONSE = 60.0;
 const int Robot::LOOK_AHEAD_LINE_WIDTH = 2;
 const SDL_Color Robot::LOOK_AHEAD_CIRCLE_COLOR = {255, 255, 0, 255};
 const SDL_Color Robot::LOOK_AHEAD_LINE_COLOR = {0, 255, 255, 255};
@@ -28,6 +30,30 @@ void Robot::init(SDL_Renderer *renderer)
     desiredRightPower = 0.0;
     leftPower = 0.0;
     rightPower = 0.0;
+}
+
+int Robot::oppositeSign(double n)
+{
+    if (n == 0)
+        return 0;
+    return n < 0 ? 1 : -1;
+}
+
+void Robot::moveToGoal()
+{
+    double absTargetAngle = atan2(goalY - y, goalX - x);
+    if (absTargetAngle < 0)
+        absTargetAngle += M_PI*2;
+    
+    double minAngle = absTargetAngle - heading;
+    if (minAngle > M_PI_2 || minAngle < -M_PI_2)
+        minAngle = oppositeSign(minAngle) * (M_PI*2 - abs(minAngle));
+    
+    double turnVel = ANGULAR_RESPONSE * minAngle;
+    double linearVel = LINEAR_RESPONSE;
+    
+    desiredLeftPower = linearVel + turnVel;
+    desiredRightPower = linearVel - turnVel;
 }
 
 void Robot::updateWheelPower(double delta)
