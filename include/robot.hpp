@@ -15,10 +15,10 @@ class Robot
 
     private:
         SDL_Texture *robotTexture;
-        const static double DRIVE_WIDTH;
-        const static double WHEEL_DIAMETER;
-        const static double ACCELERATION;
-        const static int RPM;
+        static const double DRIVE_WIDTH;
+        static const double WHEEL_DIAMETER;
+        static const double ACCELERATION;
+        static const int RPM;
         double x, y;
         double heading;
         double desiredLeftPower, desiredRightPower;
