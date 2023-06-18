@@ -88,7 +88,7 @@ bool init()
 
 void setScale()
 {
-    mapScale = SCREEN_WIDTH / FIELD_SIZE;
+    mapScale = SCREEN_WIDTH / (double)FIELD_SIZE;
 }
 
 void setPath()
