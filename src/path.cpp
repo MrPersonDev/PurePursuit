@@ -32,7 +32,13 @@ int Path::sign(double n)
 
 bool Path::validPoint(double pointX, double pointY, double x1, double y1, double x2, double y2)
 {
-    return std::min(x1, x2) <= pointX && pointX <= std::max(x1, x2) && std::min(y1, y2) <= pointY && pointY <= std::max(y1, y2);
+    bool xValid = std::min(x1, x2) <= pointX && pointX <= std::max(x1, x2);
+    bool yValid = std::min(y1, y2) <= pointY && pointY <= std::max(y1, y2);
+    
+    xValid |= abs(x1 - pointX) + abs(pointX - x2) < 0.0001;
+    yValid |= abs(y1 - pointY) + abs(pointY - y2) < 0.0001;
+    
+    return xValid && yValid;
 }
 
 double Path::pointToPointDist(double x1, double y1, double x2, double y2)
