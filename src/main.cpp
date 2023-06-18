@@ -93,10 +93,10 @@ void setScale()
 
 void setPath()
 {
-    gPath.addPoint({10, 10});
-    gPath.addPoint({500, 40});
-    gPath.addPoint({240, 600});
-    gPath.addPoint({100, 10});
+    gPath.addPoint({36, 12});
+    gPath.addPoint({36, 132});
+    gPath.addPoint({108, 132});
+    gPath.addPoint({108, 12});
 }
 
 void close()
