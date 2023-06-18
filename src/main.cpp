@@ -64,7 +64,7 @@ void render()
     SDL_RenderClear(gRenderer);
     gMap.render(gRenderer);
     gRobot.render(gRenderer, mapScale);
-    gPath.render(gRenderer);
+    gPath.render(gRenderer, mapScale);
     SDL_RenderPresent(gRenderer);
 }
 

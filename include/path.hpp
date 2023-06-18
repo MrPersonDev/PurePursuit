@@ -8,7 +8,7 @@ class Path
         Path();
         ~Path();
         void addPoint(SDL_Point point);
-        void render(SDL_Renderer *renderer);
+        void render(SDL_Renderer *renderer, double scale);
         void free();
         
     private:
