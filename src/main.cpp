@@ -119,7 +119,7 @@ void run()
 
     gRobot.reset();
     gPath.reset();
-    running = true;
+    running = !running;
 }
 
 void placePoint()
