@@ -124,6 +124,9 @@ void run()
 
 void placePoint()
 {
+    if (running)
+        return;
+
     int x, y;
     SDL_GetMouseState(&x, &y);
     
@@ -135,11 +138,17 @@ void placePoint()
 
 void clearPoints()
 {
+    if (running)
+        return;
+
     gPath.resetPath();
 }
 
 void smoothPoints()
 {
+    if (running)
+        return;
+
     gPath.smoothPoints();
 }
 
