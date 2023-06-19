@@ -57,14 +57,20 @@ int main()
                 else if (e.button.button == 3)
                     clearPoints();
             }
+            else if (e.type == SDL_KEYDOWN)
+            {
+                switch (e.key.keysym.sym)
+                {
+                    case SDLK_SPACE:
+                        run();
+                        break;
+                    case SDLK_s:
+                        smoothPoints();
+                        break;
+                }
+            }
 		}
         
-        const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-        if (currentKeyStates[SDL_SCANCODE_S])
-            smoothPoints();
-        if (currentKeyStates[SDL_SCANCODE_SPACE])
-            run();
-    
         if (running)
         {
             std::pair<double, double> goalPoint = gPath.getPoint(gRobot.getX(), gRobot.getY(), gRobot.getLookAheadDist());
