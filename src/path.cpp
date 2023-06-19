@@ -143,7 +143,7 @@ void Path::setGoalPoint(double x, double y)
     goalY = y;
 }
 
-void Path::render(SDL_Renderer *renderer, double scale)
+void Path::renderPath(SDL_Renderer *renderer, double scale)
 {
     for (int i = 0; i < (int)points.size()-1; i++)
     {
@@ -153,7 +153,10 @@ void Path::render(SDL_Renderer *renderer, double scale)
 
     for (std::pair<double, double> point : points)
         filledCircleRGBA(renderer, point.first * scale, point.second * scale, POINT_SIZE, POINT_COLOR.r, POINT_COLOR.g, POINT_COLOR.b, POINT_COLOR.a);
+}
 
+void Path::renderGoal(SDL_Renderer *renderer, double scale)
+{
     filledCircleRGBA(renderer, goalX * scale, goalY * scale, POINT_SIZE, GOAL_POINT_COLOR.r, GOAL_POINT_COLOR.g, GOAL_POINT_COLOR.b, GOAL_POINT_COLOR.a);
 }
 

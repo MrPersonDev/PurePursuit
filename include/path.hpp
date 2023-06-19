@@ -20,7 +20,8 @@ class Path
         double pointToPointDist(double x1, double y1, double x2, double y2);
         std::pair<double, double> getPoint(double x, double y, double lookAheadDist);
         void setGoalPoint(double x, double y);
-        void render(SDL_Renderer *renderer, double scale);
+        void renderPath(SDL_Renderer *renderer, double scale);
+        void renderGoal(SDL_Renderer *renderer, double scale);
         void free();
         
     private:

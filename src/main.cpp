@@ -15,6 +15,8 @@ SDL_Window *gWindow = NULL;
 SDL_Surface *gScreenSurface = NULL;
 SDL_Renderer*gRenderer = NULL;
 
+SDL_Texture *pathTexture = NULL;
+
 Map gMap;
 Robot gRobot;
 Path gPath;
@@ -25,6 +27,7 @@ void run();
 void placePoint();
 void clearPoints();
 void smoothPoints();
+void getPathTexture();
 void setScale();
 void setPath();
 void close();
@@ -96,7 +99,13 @@ void render()
     SDL_RenderClear(gRenderer);
     gMap.render(gRenderer);
     gRobot.render(gRenderer, mapScale);
-    gPath.render(gRenderer, mapScale);
+    
+    if (pathTexture != NULL)
+        SDL_RenderCopy(gRenderer, pathTexture, NULL, NULL);
+    else
+        gPath.renderPath(gRenderer, mapScale);
+    gPath.renderGoal(gRenderer, mapScale);
+
     SDL_RenderPresent(gRenderer);
 }
 
@@ -126,6 +135,11 @@ void run()
     gRobot.reset();
     gPath.reset();
     running = !running;
+    
+    if (running)
+        getPathTexture();
+    else
+        pathTexture = NULL;
 }
 
 void placePoint()
@@ -156,6 +170,19 @@ void smoothPoints()
         return;
 
     gPath.smoothPoints();
+}
+
+void getPathTexture()
+{
+    pathTexture = SDL_CreateTexture(gRenderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    SDL_SetTextureBlendMode(pathTexture, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderTarget(gRenderer, pathTexture);
+    SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
+    SDL_RenderClear(gRenderer);
+    gPath.renderPath(gRenderer, mapScale);
+
+    SDL_SetRenderTarget(gRenderer, NULL);
 }
 
 void setScale()
