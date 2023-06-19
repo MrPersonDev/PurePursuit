@@ -39,6 +39,20 @@ bool Path::hasPoint()
     return points.size() > 0;
 }
 
+void Path::smoothPoints()
+{
+    std::vector<std::pair<double, double>> smoothedPoints;
+    for (int i = 0; i < points.size()-1; i++)
+    {
+        std::pair<double, double> p1 = points[i], p2 = points[i], p3 = points[i+1], p4 = points[i+1];
+        std::vector<std::pair<double, double>> curve = Bezier::bezierCurve(p1, p2, p3, p4);
+        for (auto pair : curve)
+            smoothedPoints.push_back(pair);
+    }
+    
+    points = smoothedPoints;
+}
+
 int Path::sign(double n)
 {
     return n < 0 ? -1 : 1;

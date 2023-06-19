@@ -24,6 +24,7 @@ bool init();
 void run();
 void placePoint();
 void clearPoints();
+void smoothPoints();
 void setScale();
 void setPath();
 void close();
@@ -59,6 +60,8 @@ int main()
 		}
         
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+        if (currentKeyStates[SDL_SCANCODE_S])
+            smoothPoints();
         if (currentKeyStates[SDL_SCANCODE_SPACE])
             run();
     
@@ -133,6 +136,11 @@ void placePoint()
 void clearPoints()
 {
     gPath.resetPath();
+}
+
+void smoothPoints()
+{
+    gPath.smoothPoints();
 }
 
 void setScale()

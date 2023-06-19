@@ -3,6 +3,8 @@
 #include <vector>
 #include <utility>
 
+#include "bezier.hpp"
+
 class Path
 {
     public:
@@ -12,6 +14,7 @@ class Path
         void resetPath();
         void addPoint(double x, double y);
         bool hasPoint();
+        void smoothPoints();
         int sign(double n);
         bool validPoint(double pointX, double pointY, double x1, double y1, double x2, double y2);
         double pointToPointDist(double x1, double y1, double x2, double y2);
