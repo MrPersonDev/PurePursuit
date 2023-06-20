@@ -3,9 +3,9 @@
 const double Robot::LOOK_AHEAD_DIST = 15.0;
 const double Robot::DRIVE_WIDTH = 18;
 const double Robot::WHEEL_DIAMETER = 4;
-const double Robot::ACCELERATION = 100.0; // power / second
+const double Robot::ACCELERATION = 400.0; // power / second
 const int Robot::RPM = 200;
-const double Robot::ANGULAR_RESPONSE = 60.0;
+const double Robot::ANGULAR_RESPONSE = 50.0;
 const double Robot::LINEAR_RESPONSE = 40.0;
 const int Robot::LOOK_AHEAD_LINE_WIDTH = 2;
 const SDL_Color Robot::LOOK_AHEAD_CIRCLE_COLOR = {255, 255, 0, 255};
