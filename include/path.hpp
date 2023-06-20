@@ -16,6 +16,7 @@ class Path
         void resetPath();
         void addPoint(double x, double y);
         bool hasPoint();
+        Point getVelocityPoint(int pointIdx, int direction);
         void smoothPoints();
         void setPointCurvature();
         int sign(double n);
@@ -33,6 +34,7 @@ class Path
         static const SDL_Color LINE_COLOR;
         static const SDL_Color POINT_COLOR;
         static const SDL_Color GOAL_POINT_COLOR;
+        static const double MAX_VELOCITY_DIST;
         std::vector<Point> points;
         int lastFoundIndex;
         double goalX, goalY;

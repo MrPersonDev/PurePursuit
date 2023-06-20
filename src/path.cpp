@@ -5,6 +5,7 @@ const int Path::POINT_SIZE = 5;
 const SDL_Color Path::LINE_COLOR = {255, 0, 0, 255};
 const SDL_Color Path::POINT_COLOR = {255, 255, 0, 255};
 const SDL_Color Path::GOAL_POINT_COLOR = {0, 255, 0, 255};
+const double Path::MAX_VELOCITY_DIST = 10.0;
 
 Path::Path()
 { 
@@ -39,15 +40,35 @@ bool Path::hasPoint()
     return points.size() > 0;
 }
 
+Point Path::getVelocityPoint(int pointIdx, int direction)
+{
+    Point prevPoint = points[pointIdx-1], curPoint = points[pointIdx], nextPoint = points[pointIdx+1];
+    Point directionPoint = Bezier::normalize(Point(nextPoint.getX() - prevPoint.getX(), nextPoint.getY() - prevPoint.getY()));
+    Point pointInDirection = points[pointIdx + direction];
+
+    double dist = pointToPointDist(pointInDirection.getX(), pointInDirection.getY(), curPoint.getX(), curPoint.getY());
+    dist = std::min(MAX_VELOCITY_DIST, dist);
+    double velocityPointX = direction * directionPoint.getX() * dist + curPoint.getX();
+    double velocityPointY = direction * directionPoint.getY() * dist + curPoint.getY();
+
+    Point velocityPoint(velocityPointX, velocityPointY);
+    return velocityPoint;
+}
+
 void Path::smoothPoints()
 {
     std::vector<Point> smoothedPoints;
     Point velocityPoint = {0.0, 0.0};
     for (int i = 0; i < points.size()-1; i++)
     {
-        Point p1 = points[i];
-        Point p2 = {points[i].getX() + velocityPoint.getX(), points[i].getY() + velocityPoint.getY()};
+        Point p1 = points[i], p2 = points[i];
         Point p3 = points[i+1], p4 = points[i+1];
+        
+        if (i > 0)
+            p2 = getVelocityPoint(i, 1);
+        if (i < points.size()-2)
+            p3 = getVelocityPoint(i+1, -1);
+        
         std::vector<Point> curve = Bezier::bezierCurve(p1, p2, p3, p4);
         for (int i = 0; i < curve.size(); i++)
             smoothedPoints.push_back(Point(curve[i].getX(), curve[i].getY()));
