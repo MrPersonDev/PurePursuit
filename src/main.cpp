@@ -76,9 +76,9 @@ int main()
         
         if (running)
         {
-            std::pair<double, double> goalPoint = gPath.getPoint(gRobot.getX(), gRobot.getY(), gRobot.getLookAheadDist());
-            gPath.setGoalPoint(goalPoint.first, goalPoint.second);
-            gRobot.setGoalPoint(goalPoint.first, goalPoint.second);
+            Point goalPoint = gPath.getPoint(gRobot.getX(), gRobot.getY(), gRobot.getLookAheadDist());
+            gPath.setGoalPoint(goalPoint.getX(), goalPoint.getY());
+            gRobot.setGoalPoint(goalPoint.getX(), goalPoint.getY());
 
             gRobot.moveToGoal();
             gRobot.updateWheelPower(frameDelta);

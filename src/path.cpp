@@ -41,18 +41,19 @@ bool Path::hasPoint()
 
 void Path::smoothPoints()
 {
-    std::vector<std::pair<double, double>> smoothedPoints;
-    std::pair<double, double> velocityPoint = {0.0, 0.0};
+    std::vector<Point> smoothedPoints;
+    Point velocityPoint = {0.0, 0.0};
     for (int i = 0; i < points.size()-1; i++)
     {
-        std::pair<double, double> p1 = points[i];
-        std::pair<double, double> p2 = {points[i].first + velocityPoint.first, points[i].second + velocityPoint.second};
-        std::pair<double, double> p3 = points[i+1], p4 = points[i+1];
-        std::vector<std::pair<double, double>> curve = Bezier::bezierCurve(p1, p2, p3, p4);
-        for (auto pair : curve)
-            smoothedPoints.push_back(pair);
+        Point p1 = points[i];
+        Point p2 = {points[i].getX() + velocityPoint.getX(), points[i].getY() + velocityPoint.getY()};
+        Point p3 = points[i+1], p4 = points[i+1];
+        std::vector<Point> curve = Bezier::bezierCurve(p1, p2, p3, p4);
+        for (int i = 0; i < curve.size(); i++)
+            smoothedPoints.push_back(Point(curve[i].getX(), curve[i].getY()));
     
-        velocityPoint = Bezier::getVelocityPoint(curve);
+        Point velocityPointPair = Bezier::getVelocityPoint(curve);
+        velocityPoint = Point(velocityPointPair.getX(), velocityPointPair.getY());
     }
     
     points = smoothedPoints;
@@ -79,12 +80,12 @@ double Path::pointToPointDist(double x1, double y1, double x2, double y2)
     return sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
 }
 
-std::pair<double, double> Path::getPoint(double x, double y, double lookAheadDist)
+Point Path::getPoint(double x, double y, double lookAheadDist)
 {
     for (int i = lastFoundIndex; i < points.size()-1; i++)
     {
-        double lineX1 = points[i].first - x, lineY1 = points[i].second - y;
-        double lineX2 = points[i+1].first - x, lineY2 = points[i+1].second - y;
+        double lineX1 = points[i].getX() - x, lineY1 = points[i].getY() - y;
+        double lineX2 = points[i+1].getX() - x, lineY2 = points[i+1].getY() - y;
 
         double dx = lineX2 - lineX1, dy = lineY2 - lineY1;
         double dr = sqrt(pow(dx, 2) + pow(dy, 2));
@@ -99,13 +100,13 @@ std::pair<double, double> Path::getPoint(double x, double y, double lookAheadDis
         double sol2X = (D * dy - sign(dy) * dx * sqrt(discriminant)) / pow(dr, 2) + x;
         double sol2Y = (-D * dx - abs(dy) * sqrt(discriminant)) / pow(dr, 2) + y;
 
-        bool sol1Valid = validPoint(sol1X, sol1Y, points[i].first, points[i].second, points[i+1].first, points[i+1].second);
-        bool sol2Valid = validPoint(sol2X, sol2Y, points[i].first, points[i].second, points[i+1].first, points[i+1].second);
+        bool sol1Valid = validPoint(sol1X, sol1Y, points[i].getX(), points[i].getY(), points[i+1].getX(), points[i+1].getY());
+        bool sol2Valid = validPoint(sol2X, sol2Y, points[i].getX(), points[i].getY(), points[i+1].getX(), points[i+1].getY());
 
         if (!(sol1Valid || sol2Valid))
         {
-            double dist1 = pointToPointDist(x, y, points[i].first, points[i].second);
-            double dist2 = pointToPointDist(x, y, points[i+1].first, points[i+1].second);
+            double dist1 = pointToPointDist(x, y, points[i].getX(), points[i].getY());
+            double dist2 = pointToPointDist(x, y, points[i+1].getX(), points[i+1].getY());
 
             if (std::min(dist1, dist2) > lookAheadDist)
                 return points[lastFoundIndex];
@@ -113,27 +114,27 @@ std::pair<double, double> Path::getPoint(double x, double y, double lookAheadDis
                 continue;
         }
 
-        std::pair<double, double> sol1 = {sol1X, sol1Y}, sol2 = {sol2X, sol2Y};
+        Point sol1 = Point(sol1X, sol1Y), sol2 = Point(sol2X, sol2Y);
         
-        std::pair<double, double> goalPoint;
+        Point *goalPoint = NULL;
         if (!sol1Valid || !sol2Valid)
-            goalPoint = sol1Valid ? sol1 : sol2;
+            goalPoint = sol1Valid ? &sol1 : &sol2;
 
         if (sol1Valid && sol2Valid)
         {
-            double firstPointDist = pointToPointDist(sol1X, sol1Y, points[i+1].first, points[i+1].second);
-            double secondPointdist = pointToPointDist(sol2X, sol2Y, points[i+1].first, points[i+1].second);
+            double firstPointDist = pointToPointDist(sol1X, sol1Y, points[i+1].getX(), points[i+1].getY());
+            double secondPointdist = pointToPointDist(sol2X, sol2Y, points[i+1].getX(), points[i+1].getY());
             
-            goalPoint = firstPointDist < secondPointdist ? sol1 : sol2;
+            goalPoint = firstPointDist < secondPointdist ? &sol1 : &sol2;
         }
         
-        double goalPointDist = pointToPointDist(goalPoint.first, goalPoint.second, points[i+1].first, points[i+1].second);
-        double currentDist = pointToPointDist(x, y, points[i+1].first, points[i+1].second);
+        double goalPointDist = pointToPointDist(goalPoint->getX(), goalPoint->getY(), points[i+1].getX(), points[i+1].getY());
+        double currentDist = pointToPointDist(x, y, points[i+1].getX(), points[i+1].getY());
         
         if (currentDist > goalPointDist)
         {
             lastFoundIndex = i;
-            return goalPoint;
+            return *goalPoint;
         }
         else
             lastFoundIndex = i+1;
@@ -152,12 +153,12 @@ void Path::renderPath(SDL_Renderer *renderer, double scale)
 {
     for (int i = 0; i < (int)points.size()-1; i++)
     {
-        std::pair<double, double> curPoint = points[i], nextPoint = points[i+1];
-        thickLineRGBA(renderer, curPoint.first * scale, curPoint.second * scale, nextPoint.first * scale, nextPoint.second * scale, LINE_WIDTH, LINE_COLOR.r, LINE_COLOR.g, LINE_COLOR.b, LINE_COLOR.a);
+        Point curPoint = points[i], nextPoint = points[i+1];
+        thickLineRGBA(renderer, curPoint.getX() * scale, curPoint.getY() * scale, nextPoint.getX() * scale, nextPoint.getY() * scale, LINE_WIDTH, LINE_COLOR.r, LINE_COLOR.g, LINE_COLOR.b, LINE_COLOR.a);
     }
 
-    for (std::pair<double, double> point : points)
-        filledCircleRGBA(renderer, point.first * scale, point.second * scale, POINT_SIZE, POINT_COLOR.r, POINT_COLOR.g, POINT_COLOR.b, POINT_COLOR.a);
+    for (Point point : points)
+        filledCircleRGBA(renderer, point.getX() * scale, point.getY() * scale, POINT_SIZE, POINT_COLOR.r, POINT_COLOR.g, POINT_COLOR.b, POINT_COLOR.a);
 }
 
 void Path::renderGoal(SDL_Renderer *renderer, double scale)
