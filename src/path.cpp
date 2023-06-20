@@ -59,6 +59,31 @@ void Path::smoothPoints()
     points = smoothedPoints;
 }
 
+void Path::setPointCurvature()
+{
+    if (points.size() == 0)
+        return;
+
+    for (int i = 1; i < points.size(); i++)
+    {
+        Point prevPoint = points[i-1], curPoint = points[i], nextPoint = points[i+1];
+        double dist1 = pointToPointDist(curPoint.getX(), curPoint.getY(), prevPoint.getX(), prevPoint.getY());
+        double dist2 = pointToPointDist(curPoint.getX(), curPoint.getY(), nextPoint.getX(), nextPoint.getY());
+        double dist3 = pointToPointDist(prevPoint.getX(), prevPoint.getY(), nextPoint.getX(), nextPoint.getY());
+        
+        double productOfSides = dist1 * dist2 * dist3;
+        double semiPerimeter = (dist1 + dist2 + dist3) / 2.0;
+        double triangleArea = sqrt(semiPerimeter * (semiPerimeter - dist1) * (semiPerimeter - dist2) * (semiPerimeter - dist3));
+        
+        double r = productOfSides / (4 * triangleArea);
+        double curvature = isnan(1 / r) ? 0 : 1/r;
+        points[i].setCurvature(curvature);
+    }
+    
+    points[0].setCurvature(0);
+    points[points.size()-1].setCurvature(0);
+}
+
 int Path::sign(double n)
 {
     return n < 0 ? -1 : 1;
@@ -134,6 +159,8 @@ Point Path::getPoint(double x, double y, double lookAheadDist)
         if (currentDist > goalPointDist)
         {
             lastFoundIndex = i;
+            double curvature = (points[i].getCurvature() + points[i+1].getCurvature()) / 2.0;
+            goalPoint->setCurvature(curvature);
             return *goalPoint;
         }
         else
