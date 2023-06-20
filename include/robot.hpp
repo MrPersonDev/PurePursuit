@@ -12,7 +12,7 @@ class Robot
         void init(SDL_Renderer *renderer);
         void reset();
         int oppositeSign(double n);
-        void moveToGoal();
+        void moveToGoal(double curvature);
         void updateWheelPower(double delta);
         void updatePosition(double delta);
         void setGoalPoint(double x, double y);

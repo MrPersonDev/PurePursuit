@@ -6,7 +6,7 @@ const double Robot::WHEEL_DIAMETER = 4;
 const double Robot::ACCELERATION = 400.0; // power / second
 const int Robot::RPM = 200;
 const double Robot::ANGULAR_RESPONSE = 50.0;
-const double Robot::LINEAR_RESPONSE = 40.0;
+const double Robot::LINEAR_RESPONSE = 100.0;
 const int Robot::LOOK_AHEAD_LINE_WIDTH = 2;
 const SDL_Color Robot::LOOK_AHEAD_CIRCLE_COLOR = {255, 255, 0, 255};
 const SDL_Color Robot::LOOK_AHEAD_LINE_COLOR = {0, 255, 255, 255};
@@ -44,7 +44,7 @@ int Robot::oppositeSign(double n)
     return n < 0 ? 1 : -1;
 }
 
-void Robot::moveToGoal()
+void Robot::moveToGoal(double curvature)
 {
     double absTargetAngle = atan2(goalY - y, goalX - x);
     if (absTargetAngle < 0)
@@ -55,7 +55,7 @@ void Robot::moveToGoal()
         minAngle = oppositeSign(minAngle) * (M_PI*2 - abs(minAngle));
     
     double turnVel = ANGULAR_RESPONSE * minAngle;
-    double linearVel = LINEAR_RESPONSE;
+    double linearVel = LINEAR_RESPONSE * (1 - curvature) * (1 - abs(minAngle/M_PI));
     
     desiredLeftPower = linearVel + turnVel;
     desiredRightPower = linearVel - turnVel;
