@@ -11,7 +11,10 @@ const int Robot::LOOK_AHEAD_LINE_WIDTH = 2;
 const SDL_Color Robot::LOOK_AHEAD_CIRCLE_COLOR = {255, 255, 0, 255};
 const SDL_Color Robot::LOOK_AHEAD_LINE_COLOR = {0, 255, 255, 255};
 
-Robot::Robot() { }
+Robot::Robot()
+{
+    goal = {0.0, 0.0};
+}
 
 Robot::~Robot()
 {
@@ -46,7 +49,7 @@ int Robot::oppositeSign(double n)
 
 void Robot::moveToGoal(double curvature)
 {
-    double absTargetAngle = atan2(goalY - y, goalX - x);
+    double absTargetAngle = atan2(goal.getY() - y, goal.getX() - x);
     if (absTargetAngle < 0)
         absTargetAngle += M_PI*2;
     
@@ -56,6 +59,10 @@ void Robot::moveToGoal(double curvature)
     
     double turnVel = ANGULAR_RESPONSE * minAngle;
     double linearVel = LINEAR_RESPONSE * (1 - curvature) * (1 - abs(minAngle/M_PI));
+    if (goal.isStopping()) {
+        double dist = sqrt(pow(goal.getY() - y, 2) + pow(goal.getX() - x, 2));
+        linearVel *= dist / LOOK_AHEAD_DIST;
+    }
     
     desiredLeftPower = linearVel + turnVel;
     desiredRightPower = linearVel - turnVel;
@@ -99,10 +106,9 @@ void Robot::updatePosition(double delta)
     heading -= angular;
 }
 
-void Robot::setGoalPoint(double x, double y)
+void Robot::setGoalPoint(Point point)
 {
-    goalX = x;
-    goalY = y;
+    goal = point;
 }
 
 double Robot::getX()
@@ -128,7 +134,7 @@ double Robot::getLookAheadDist()
 void Robot::render(SDL_Renderer *renderer, double scale)
 {
     circleRGBA(renderer, x * scale, y * scale, LOOK_AHEAD_DIST * scale, LOOK_AHEAD_CIRCLE_COLOR.r, LOOK_AHEAD_CIRCLE_COLOR.g, LOOK_AHEAD_CIRCLE_COLOR.b, LOOK_AHEAD_CIRCLE_COLOR.a);
-    thickLineRGBA(renderer, x * scale, y * scale, goalX * scale, goalY * scale, LOOK_AHEAD_LINE_WIDTH, LOOK_AHEAD_LINE_COLOR.r, LOOK_AHEAD_LINE_COLOR.g, LOOK_AHEAD_LINE_COLOR.b, LOOK_AHEAD_LINE_COLOR.a);
+    thickLineRGBA(renderer, x * scale, y * scale, goal.getX() * scale, goal.getY() * scale, LOOK_AHEAD_LINE_WIDTH, LOOK_AHEAD_LINE_COLOR.r, LOOK_AHEAD_LINE_COLOR.g, LOOK_AHEAD_LINE_COLOR.b, LOOK_AHEAD_LINE_COLOR.a);
 
     SDL_Rect renderQuad = {(x-DRIVE_WIDTH/2) * scale, (y-DRIVE_WIDTH/2) * scale, DRIVE_WIDTH * scale, DRIVE_WIDTH * scale};
     SDL_RenderCopyEx(renderer, robotTexture, NULL, &renderQuad, heading * (180.0 / M_PI), NULL, SDL_FLIP_NONE);

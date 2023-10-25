@@ -18,6 +18,7 @@ class Path
         bool hasPoint();
         Point getVelocityPoint(int pointIdx, int direction);
         void smoothPoints();
+        void setStopPoint();
         void setPointCurvature();
         int sign(double n);
         bool validPoint(double pointX, double pointY, double x1, double y1, double x2, double y2);

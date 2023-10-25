@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <string>
+#include "point.hpp"
 
 class Robot
 {
@@ -15,7 +16,7 @@ class Robot
         void moveToGoal(double curvature);
         void updateWheelPower(double delta);
         void updatePosition(double delta);
-        void setGoalPoint(double x, double y);
+        void setGoalPoint(Point point);
         double getX();
         double getY();
         double getHeading();
@@ -35,8 +36,8 @@ class Robot
         static const SDL_Color LOOK_AHEAD_CIRCLE_COLOR;
         static const SDL_Color LOOK_AHEAD_LINE_COLOR;
         static const int LOOK_AHEAD_LINE_WIDTH;
+        Point goal;
         double x, y;
-        double goalX, goalY;
         double heading;
         double desiredLeftPower, desiredRightPower;
         double leftPower, rightPower;

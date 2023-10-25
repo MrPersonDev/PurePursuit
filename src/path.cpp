@@ -80,6 +80,11 @@ void Path::smoothPoints()
     points = smoothedPoints;
 }
 
+void Path::setStopPoint()
+{
+    points.back().setStopping(true);
+}
+
 void Path::setPointCurvature()
 {
     if (points.size() == 0)

@@ -1,9 +1,15 @@
 #include "point.hpp"
 
+Point::Point()
+{
+    Point(0.0, 0.0);
+}
+
 Point::Point(double x, double y)
 {
     this->x = x;
     this->y = y;
+    this->stopping = false;
 }
 
 Point::~Point() { }
@@ -31,4 +37,12 @@ double Point::getCurvature()
 void Point::setCurvature(double curvature)
 {
     this->curvature = curvature;
+}
+
+void Point::setStopping(bool stopping) {
+    this->stopping = stopping;
+}
+
+bool Point::isStopping() {
+    return stopping;
 }

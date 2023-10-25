@@ -78,7 +78,7 @@ int main()
         {
             Point goalPoint = gPath.getPoint(gRobot.getX(), gRobot.getY(), gRobot.getLookAheadDist());
             gPath.setGoalPoint(goalPoint.getX(), goalPoint.getY());
-            gRobot.setGoalPoint(goalPoint.getX(), goalPoint.getY());
+            gRobot.setGoalPoint(goalPoint);
 
             gRobot.moveToGoal(goalPoint.getCurvature());
             gRobot.updateWheelPower(frameDelta);
@@ -135,6 +135,7 @@ void run()
     gRobot.reset();
     gPath.reset();
     gPath.setPointCurvature();
+    gPath.setStopPoint();
     running = !running;
     
     if (running)
