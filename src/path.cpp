@@ -133,6 +133,9 @@ double Path::pointToPointDist(double x1, double y1, double x2, double y2)
 
 Point Path::getPoint(double x, double y, double lookAheadDist)
 {
+    if (lastFoundIndex >= (int)points.size()-2 && pointToPointDist(points.back().getX(), points.back().getY(), x, y) < lookAheadDist)
+        return points.back();
+
     for (int i = lastFoundIndex; i < points.size()-1; i++)
     {
         double lineX1 = points[i].getX() - x, lineY1 = points[i].getY() - y;
